@@ -1,7 +1,5 @@
 "use client";
-import Button from "../app/components/ui/Button";
-import Table from "../app/components/ui/Table";
-import Sidebar from "./components/ui/sideBar";
+
 
 
 
@@ -13,7 +11,7 @@ export default function Home() {
       </main>
     
 
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center"></footer>
+      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">2025@cst.technology</footer>
     </div>
   );
 }
