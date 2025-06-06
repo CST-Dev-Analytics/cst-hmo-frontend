@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+:root {
+  
+  --font-poppins: 'Poppins', sans-serif;
+  --font-grotesk: 'Space Grotesk', sans-serif;
+}
+
+@theme inline {
+  --font-sans: var(--font-poppins);
+  --font-mono: var(--font-grotesk);
+}
+
+
+body {
+
+  font-family: var(--font-poppins);
+}
