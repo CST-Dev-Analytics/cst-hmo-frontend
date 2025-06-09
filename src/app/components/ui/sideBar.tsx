@@ -12,6 +12,7 @@ import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
 import HotelIcon from '@mui/icons-material/Hotel';
 import SettingsIcon from '@mui/icons-material/Settings';
 
+
 export default function Sidebar() {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: DashboardIcon, href: "/dashboard" },
@@ -24,16 +25,17 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col text-black">
+    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col text-black h-full">
       <div className="p-6 border-b border-gray-200 flex items-center space-x-2">
-        <LocalHospitalIcon className="text-blue-600" style={{ fontSize: 32 }} />
+        <LocalHospitalIcon className="text-[#14B8A6]" style={{ fontSize: 32 }} />
         <div>
           <h1 className="text-xl font-bold text-gray-900">MedCare HMS</h1>
           <p className="text-sm text-gray-500">Hospital Management</p>
         </div>
       </div>
 
-      <nav className="flex-1 p-4 space-y-6 whitespace-nowrap">
+      {/* Nav takes all remaining space */}
+      <nav className="flex-1 p-4 space-y-6 whitespace-nowrap overflow-auto">
         {menuItems.map(({ id, label, icon: Icon, href }) => (
           <Link
             key={id}
@@ -46,9 +48,10 @@ export default function Sidebar() {
         ))}
       </nav>
 
+      {/* Settings at the bottom */}
       <Link
         href="/settings"
-        className="p-4 border-t border-gray-200 flex items-center hover:bg-gray-100"
+        className="p-4 border-t text-[12px] border-gray-200 flex items-center hover:bg-gray-100"
       >
         <SettingsIcon style={{ fontSize: 20 }} className="mr-3" />
         <span>Settings</span>
@@ -56,3 +59,5 @@ export default function Sidebar() {
     </aside>
   );
 }
+
+

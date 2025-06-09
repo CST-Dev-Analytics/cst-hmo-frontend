@@ -4,6 +4,7 @@
   
   --font-poppins: 'Poppins', sans-serif;
   --font-grotesk: 'Space Grotesk', sans-serif;
+   --background-offwhite: #F8F8F8   ;
 }
 
 @theme inline {
@@ -13,6 +14,6 @@
 
 
 body {
-
+  background-color: var(--background-offwhite);
   font-family: var(--font-poppins);
 }

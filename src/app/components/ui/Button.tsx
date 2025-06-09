@@ -1,12 +1,12 @@
-// components/ui/Button.tsx
 import React from 'react';
 
 type ButtonProps = {
-  title: string;
+  title?: string;
   onClick?: () => void;
   variant?: 'primary' | 'secondary';
   type?: 'button' | 'submit' | 'reset';
   className?: string;
+  children?: React.ReactNode;
 };
 
 export default function Button({
@@ -15,11 +15,14 @@ export default function Button({
   variant = 'primary',
   type = 'button',
   className = '',
+  children,
 }: ButtonProps) {
-  const base = 'px-4 py-2 rounded-lg transition-all cursor-pointer ';
+  const base = `px-4 py-2 rounded-lg border-2 transition-all duration-300 ease-in-out transform cursor-pointer 
+                hover:scale-105 active:scale-110 hover:shadow-md focus:outline-none`;
+
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 ',
-    secondary: 'bg-blue-100 text-black hover:bg-blue-200',
+    primary: 'bg-[#2563EB] text-white hover:bg-[#1D4ED8]',
+    secondary: 'bg-[#14B8A6] text-white hover:bg-[#0D9488]',
   };
 
   return (
@@ -28,7 +31,7 @@ export default function Button({
       onClick={onClick}
       className={`${base} ${variants[variant]} ${className}`}
     >
-      {title}
+      {children ?? title}
     </button>
   );
 }
