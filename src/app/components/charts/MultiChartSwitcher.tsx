@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Line, Bar, Pie, Radar, PolarArea } from "react-chartjs-2";
+import { Line, Bar, Pie} from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
