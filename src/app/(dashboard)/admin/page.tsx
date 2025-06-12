@@ -1,63 +1,104 @@
+// "use client";
+// import React, { useState } from "react";
+// import Image from "next/image";
+// import { Pill, ChevronDown, AlertCircle } from "lucide-react";
+// import { CalendarIcon, UserIcon, HeartIcon } from "@heroicons/react/24/outline";
+// import LineChart from "../../components/charts/MultiChartSwitcher";
+// import Link from "next/link";
+
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
 import { Pill, ChevronDown, AlertCircle } from "lucide-react";
 import { CalendarIcon, UserIcon, HeartIcon } from "@heroicons/react/24/outline";
-import LineChart from "../components/charts/MultiChartSwitcher";
+import LineChart from "../../components/charts/MultiChartSwitcher";
 import Link from "next/link";
-
-type RecentActivity = {
-  id?: string | number;
-  status: string;
-  type: string;
-  patient: string;
-  time: string;
-};
-
-type UpcomingAppointment = {
-  id?: string | number;
-  patient: string;
-  date: string;
-  time: string;
-  department: string;
-};
-
-interface DashboardProps {
-  upcomingAppointments?: UpcomingAppointment[];
-  recentActivities?: RecentActivity[];
-}
-
-export default function Dashboard({
-  upcomingAppointments = [],
-  recentActivities = [],
-}: DashboardProps) {
+export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("quickActions");
   const [selectedPatientType, setSelectedPatientType] = useState("all");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const getActivePatientCount = () => {
-    return (
-      patientTypeData[selectedPatientType as keyof typeof patientTypeData]
-        ?.count || 0
-    );
-  };
-
-  const getOccupancyRate = () => {
-    const data =
-      patientTypeData[selectedPatientType as keyof typeof patientTypeData];
-    return data ? Math.round((data.count / data.total) * 100) : 0;
-  };
-
-  const handlePatientTypeChange = (type: string) => {
-    setSelectedPatientType(type);
-    setDropdownOpen(false);
-  };
   // Mock data for different patient types in beds
   const patientTypeData = {
     all: { count: 127, total: 150, label: "All Patients" },
     hmo: { count: 65, total: 150, label: "HMO Patients" },
     corporate: { count: 38, total: 150, label: "Corporate Patients" },
     private: { count: 24, total: 150, label: "Private Patients" },
+  };
+
+  // Mock data for recent activities
+  const recentActivities = [
+    {
+      id: 1,
+      type: "patient-admission",
+      patient: "John Doe",
+      time: "2 hours ago",
+      status: "completed",
+    },
+    {
+      id: 2,
+      type: "surgery-scheduled",
+      patient: "Jane Smith",
+      time: "4 hours ago",
+      status: "in-progress",
+    },
+    {
+      id: 3,
+      type: "medication-dispensed",
+      patient: "Bob Johnson",
+      time: "6 hours ago",
+      status: "completed",
+    },
+  ];
+
+  // Mock data for upcoming appointments
+  const upcomingAppointments = [
+    {
+      id: 1,
+      patient: "Alice Brown",
+      date: "Today",
+      time: "2:00 PM",
+      department: "Cardiology",
+    },
+    {
+      id: 2,
+      patient: "Charlie Wilson",
+      date: "Today",
+      time: "3:30 PM",
+      department: "Orthopedics",
+    },
+    {
+      id: 3,
+      patient: "Diana Davis",
+      date: "Tomorrow",
+      time: "9:00 AM",
+      department: "Pediatrics",
+    },
+  ];
+
+  const getActivePatientCount = () => {
+    if (selectedPatientType === "all") return patientTypeData.all.count;
+    if (selectedPatientType === "hmo") return patientTypeData.hmo.count;
+    if (selectedPatientType === "corporate")
+      return patientTypeData.corporate.count;
+    if (selectedPatientType === "private") return patientTypeData.private.count;
+    return 0;
+  };
+
+  const getOccupancyRate = () => {
+    let data;
+    if (selectedPatientType === "all") data = patientTypeData.all;
+    else if (selectedPatientType === "hmo") data = patientTypeData.hmo;
+    else if (selectedPatientType === "corporate")
+      data = patientTypeData.corporate;
+    else if (selectedPatientType === "private") data = patientTypeData.private;
+
+    return data ? Math.round((data.count / data.total) * 100) : 0;
+  };
+
+  const handlePatientTypeChange = (type) => {
+    setSelectedPatientType(type);
+    setDropdownOpen(false);
   };
 
   const quickActions = [
@@ -109,11 +150,10 @@ export default function Dashboard({
 
       {/* Stats Grid */}
       <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-[12px]">
-        {/* Total Patients */}
+        {/* Total Doctors */}
         <div className="border border-gray-200 rounded-[20px] p-4 shadow-2xl bg-white flex flex-col justify-between h-full">
           <div className="flex flex-row items-center justify-between pb-2">
             <h3 className="font-medium">Total Doctors</h3>
-            {/* <Users className="h-4 w-4 text-muted-foreground" /> */}
             <Image
               src="/assets/images/doctor.svg"
               alt="Doctor icon"
@@ -143,30 +183,59 @@ export default function Dashboard({
                 className="h-8 px-2 w-full border border-gray-300 rounded-md hover:bg-gray-100 text-[12px] flex items-center justify-between"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
-                {
-                  patientTypeData[
-                    selectedPatientType as keyof typeof patientTypeData
-                  ].label
-                }
+                {selectedPatientType === "all"
+                  ? patientTypeData.all.label
+                  : selectedPatientType === "hmo"
+                  ? patientTypeData.hmo.label
+                  : selectedPatientType === "corporate"
+                  ? patientTypeData.corporate.label
+                  : patientTypeData.private.label}
                 <ChevronDown className="ml-1 inline h-3 w-3" />
               </button>
 
               {dropdownOpen && (
                 <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-50 text-[12px]">
                   <div className="py-1">
-                    {Object.entries(patientTypeData).map(([key, value]) => (
-                      <button
-                        key={key}
-                        className={`block w-full text-left px-3 py-2 hover:bg-gray-50 ${
-                          selectedPatientType === key
-                            ? "bg-blue-50 text-blue-600"
-                            : "text-gray-700"
-                        }`}
-                        onClick={() => handlePatientTypeChange(key)}
-                      >
-                        {value.label}
-                      </button>
-                    ))}
+                    <button
+                      className={`block w-full text-left px-3 py-2 hover:bg-gray-50 ${
+                        selectedPatientType === "all"
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-700"
+                      }`}
+                      onClick={() => handlePatientTypeChange("all")}
+                    >
+                      {patientTypeData.all.label}
+                    </button>
+                    <button
+                      className={`block w-full text-left px-3 py-2 hover:bg-gray-50 ${
+                        selectedPatientType === "hmo"
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-700"
+                      }`}
+                      onClick={() => handlePatientTypeChange("hmo")}
+                    >
+                      {patientTypeData.hmo.label}
+                    </button>
+                    <button
+                      className={`block w-full text-left px-3 py-2 hover:bg-gray-50 ${
+                        selectedPatientType === "corporate"
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-700"
+                      }`}
+                      onClick={() => handlePatientTypeChange("corporate")}
+                    >
+                      {patientTypeData.corporate.label}
+                    </button>
+                    <button
+                      className={`block w-full text-left px-3 py-2 hover:bg-gray-50 ${
+                        selectedPatientType === "private"
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-700"
+                      }`}
+                      onClick={() => handlePatientTypeChange("private")}
+                    >
+                      {patientTypeData.private.label}
+                    </button>
                   </div>
                 </div>
               )}
@@ -187,8 +256,7 @@ export default function Dashboard({
         {/* Today's Revenue */}
         <div className="border border-gray-200 rounded-[20px] p-4 shadow-2xl bg-white flex flex-col justify-between h-full">
           <div className="flex flex-row items-center justify-between pb-2">
-            <h3 className="font-medium">Today&apos;s Revenue</h3>
-            {/* <DollarSign className="h-4 w-4 text-muted-foreground" /> */}
+            <h3 className="font-medium">{"Today's Revenue"}</h3>
             <Image
               src="/assets/images/dollarSign.svg"
               alt="Doctor icon"
@@ -221,21 +289,12 @@ export default function Dashboard({
       </div>
 
       {/* Recent Activities */}
-      <section
-        className="grid gap-6 md:grid-cols-2 lg:grid-cols-7 text-[12px]"
-        aria-label="Dashboard main content"
-      >
+      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-7 text-[12px]">
         {/* Recent Activities */}
-        <section
-          className="bg-white backdrop-blur-lg text-[12px] rounded-[20px] border border-gray-200 shadow-lg col-span-4"
-          aria-labelledby="recent-activities-heading"
-        >
+        <section className="bg-white backdrop-blur-lg text-[12px] rounded-[20px] border border-gray-200 shadow-lg col-span-4">
           <div className="p-6 text-[12px]">
             <header className="mb-6">
-              <h2
-                id="recent-activities-heading"
-                className="text-[12px] font-bold text-gray-900"
-              >
+              <h2 className="text-[12px] font-bold text-gray-900">
                 Recent Activities
               </h2>
               <p className="text-gray-600">
@@ -249,8 +308,14 @@ export default function Dashboard({
                 </p>
               ) : (
                 recentActivities.map((activity, index) => {
-                  const colors =
-                    statusColors[activity.status] || statusColors.pending;
+                  let colors;
+                  if (activity.status === "completed") {
+                    colors = statusColors.completed;
+                  } else if (activity.status === "in-progress") {
+                    colors = statusColors["in-progress"];
+                  } else {
+                    colors = statusColors.pending;
+                  }
                   return (
                     <article
                       key={activity.id || index}
@@ -259,8 +324,6 @@ export default function Dashboard({
                       <div className="flex items-start space-x-4">
                         <span
                           className={`mt-1.5 w-3 h-3 rounded-full ${colors.dot}`}
-                          aria-label={activity.status}
-                          role="status"
                         />
                         <div>
                           <p className="font-medium capitalize text-gray-900">
@@ -290,10 +353,7 @@ export default function Dashboard({
         {/* Right side tabs */}
         <section className="col-span-3">
           {/* Tabs Nav */}
-          <nav
-            className="flex space-x-4 mb-6 border-b border-gray-300"
-            aria-label="Dashboard navigation tabs"
-          >
+          <nav className="flex space-x-4 mb-6 border-b border-gray-300">
             {["quickActions", "appointments", "activities", "pharmacy"].map(
               (tab) => (
                 <button
@@ -304,10 +364,6 @@ export default function Dashboard({
                       : "text-gray-500"
                   }`}
                   onClick={() => setActiveTab(tab)}
-                  aria-selected={activeTab === tab}
-                  role="tab"
-                  id={`tab-${tab}`}
-                  aria-controls={`tabpanel-${tab}`}
                 >
                   {tab
                     .replace(/([A-Z])/g, " $1")
@@ -318,13 +374,7 @@ export default function Dashboard({
           </nav>
 
           {/* Tab Panels */}
-          <section
-            id={`tabpanel-${activeTab}`}
-            role="tabpanel"
-            aria-labelledby={`tab-${activeTab}`}
-            tabIndex={0}
-            className="bg-white rounded-[20px] border border-gray-200 shadow-md p-6 min-h-[200px]"
-          >
+          <section className="bg-white rounded-[20px] border border-gray-200 shadow-md p-6 min-h-[200px]">
             {activeTab === "quickActions" && (
               <>
                 <header className="mb-4">
@@ -340,7 +390,7 @@ export default function Dashboard({
                       href={link}
                       className={`h-20 flex items-center justify-center gap-3 rounded-lg p-4 ${
                         title === "Register New Patient"
-                          ? "bg-[#14B8A6]  text-white"
+                          ? "bg-[#14B8A6] text-white"
                           : "border border-gray-300 text-gray-700 hover:bg-gray-100"
                       }`}
                     >
@@ -406,8 +456,10 @@ export default function Dashboard({
         </section>
       </section>
 
-      <section className="bg-white rounded-[20px] border border-gray-200 shadow-md p-6 min-h-[200px]">
-        <LineChart />
+      <section className="bg-white rounded-[20px] border border-gray-200 shadow-md p-6 min-h-[600px] h-full">
+        <div className="">
+          <LineChart  />
+        </div>
       </section>
     </main>
   );

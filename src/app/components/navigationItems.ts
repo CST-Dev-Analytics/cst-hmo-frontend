@@ -15,8 +15,8 @@ import Inventory2Icon from "@mui/icons-material/Inventory2";
 
 const navigationItems: Record<string, { label: string; href: string; icon: any }[]> = {
   admin: [
-    { label: "Dashboard", href: "/admin/dashboard", icon: DashboardIcon },
-    { label: "Patients", href: "/admin/patients", icon: PeopleIcon },
+    { label: "Dashboard", href: "/admin", icon: DashboardIcon },
+    { label: "Patients", href: "/admin/patient-management", icon: PeopleIcon },
     { label: "Appointments", href: "/admin/appointments", icon: CalendarMonthIcon },
     { label: "Doctors", href: "/admin/doctors", icon: LocalHospitalIcon },
     { label: "Prescriptions", href: "/admin/prescriptions", icon: MedicationIcon },

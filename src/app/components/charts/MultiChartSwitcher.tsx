@@ -170,21 +170,23 @@ export default function MultiChartSwitcher() {
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">Hospital Dashboard</h2>
-      <select
-        value={selectedChart}
-        onChange={(e) => setSelectedChart(e.target.value)}
-      
-        className="border rounded-lg border-gray-300 text-[12px] px-4 py-2"
-      >
-        <option value="billing" className="text-[12px]">Billing (Bar Chart)</option>
-        <option value="admissions" className="text-[12px]">Admissions & Discharges (Line Chart)</option>
-        <option value="pharmacy" className="text-[12px]">Pharmacy (Pie Chart)</option>
-        <option value="inventory" className="text-[12px]">Inventory (Bar Chart)</option>
-      </select>
+   <div className="w-full h-[400px]">
+  <h2 className="text-xl font-semibold mb-4">Hospital Dashboard</h2>
+  <select
+    value={selectedChart}
+    onChange={(e) => setSelectedChart(e.target.value)}
+    className="border rounded-lg border-gray-300 text-[12px] px-4 py-2 mb-4"
+  >
+    <option value="billing">Billing (Bar Chart)</option>
+    <option value="admissions">Admissions & Discharges (Line Chart)</option>
+    <option value="pharmacy">Pharmacy (Pie Chart)</option>
+    <option value="inventory">Inventory (Bar Chart)</option>
+  </select>
 
-      {renderChart()}
-    </div>
+  <div className="w-full h-full">
+    {renderChart()}
+  </div>
+</div>
+
   );
 }
